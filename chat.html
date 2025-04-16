@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Chatbot</title>
+    <link rel="stylesheet" href="chat.css">
+    <style>
+        a{
+            font-size: 1.2rem;
+            font-weight: bold;
+            background-color: transparent;
+            border: 1px solid #F1F8E9;
+            padding: 10px 40px;
+            border-radius: 25px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            background-color: #8BC34A;
+            border-color: #8BC34A;
+            box-shadow: 0 0 50px #8BC34A;
+            border-right: 80px;
+        }   
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h3>Plant healer Chatbot</h3>
+        </div>
+        <div class="chat-messages" id="chat-messages"></div>
+        
+        <div class="chat-input-container">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+    <script src="chat.js"></script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background:lightblue;
+}
+
+.title-container {
+    text-align: center;
+    margin-bottom: 70px;
+}
+
+.title-container h1 {
+    font-size: 40px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+    background-color:rgba(45, 182, 245, 0.712);
+}
+
+.reader-wrapper {
+    width: 350px;
+    border-radius: 7px;
+    background: #8754ff;
+    padding: 20px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    margin-bottom: 90px;
+}
+
+.reader-wrapper form {
+    height: 200px;
+    display: flex;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 7px;
+    background: #fff;
+    align-items: center;
+    justify-content: center;
+}
+
+form img {
+    display: none;
+    max-width: 140px;
+}
+
+form .content i {
+    color: #8754ff;
+    font-size: 50px;
+}
+
+form .content p {
+    color: #8754ff;
+    margin-top: 12px;
+    font-size: 14px;
+}
+
+h3{
+    margin-top: 90px;
+    font-size: 20px;
+    color: black;
+    background-color: rgb(224, 224, 43);
+    font-weight: 500;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.popup-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 500px;
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out, opacity 0.2s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.popup-box.active {
+    transform: translate(-50%, -50%) scale(1);
+    visibility: visible;
+    opacity: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    cursor: pointer;
+    color: red;
+    transition: transform 0.3s ease, color 0.2s;
+}
+
+.close-btn:hover {
+    transform: rotate(180deg);
+    color: darkred;
+}
+
+.result-box {
+    width: 100%;
+    background: #f5f5f5;
+    border-radius: 6px;
+    padding: 15px;
+    margin-top: 15px;
+    text-align: left;
+    word-break: break-word;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+}
+
+.highlight {
+    background: #27ae60;
+    color: white;
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+.scanner-container {
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.start-scan-btn, .stop-scan-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background: #8754ff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.start-scan-btn:hover, .stop-scan-btn:hover {
+    background: #6b3fe2;
+}
+a{
+    font-size: 1.2rem;
+    font-weight: bold;
+    text-decoration: none;
+    background-color:transparent;
+    border: 1px solid #F1F8E9;
+    padding: 10px 50px;
+    border-radius: 30px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: #8BC34A;
+    border-color: #8BC34A;
+    box-shadow: 0 0 50px #8BC34A;
+}   
+.head{
+    padding: 15px;
+    border-radius: 30px;
+}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plant Leaf Recognition and Classification</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #e0f2f7, #659cc9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+      
+        #container {
+            width: 600px;
+            padding: 30px;
+            background-color: white;
+            border-radius: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+            border: 3px solid #ddd88e;
+        }
+
+        #container:hover {
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        #heading {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        #upload-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        #image-preview {
+            max-width: 100%;
+            max-height: 350px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        #result {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #f0f0f0;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        #upload-button {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #66bb6a, #43a047); 
+            color: white;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        #upload-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        #upload-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 150%; 
+            height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.4s ease;
+            animation: shine 2s infinite linear;
+        }
+
+        #upload-button:hover::before {
+            transform: translateX(25%);
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%);
+            }
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            line-height: 1.7;
+        }
+
+        .result-label {
+            font-weight: 600;
+            display: block;
+            color: #555;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1 id="heading">Plant Leaf Recognition and Classification</h1>
+        <div id="upload-container">
+            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+            <button id="upload-button">Upload Plant Leaf Image</button>
+            <img id="image-preview" src="" alt="Image Preview">
+        </div>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_KEY = 'AIzaSyAaO4yCc9lUqAJRFv6xjRaQFP3aMYFJfGk'; 
+        const API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent';
+        const imageUpload = document.getElementById('image-upload');
+        const uploadButton = document.getElementById('upload-button');
+        const imagePreview = document.getElementById('image-preview');
+        const resultDiv = document.getElementById('result');
+
+        async function generateResponse(imageData) {
+            const prompt = "Identify this plant leaf and provide: name, botanical name, uses, benefits, other details. Format the output in a clean, readable way, like: Name: [name], Botanical Name: [botanical name], Uses: [uses], Benefits: [benefits], Other Details: [other details].";
+            const parts = [{ text: prompt }, {
+                inlineData: {
+                    mimeType: 'image/jpeg',
+                    data: imageData.split(',')[1],
+                },
+            }];
+
+            const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contents: [{ parts }],
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to generate response');
+            }
+
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        }
+
+        uploadButton.addEventListener('click', () => {
+            imageUpload.click();
+        });
+
+        imageUpload.addEventListener('change', async (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = 'block';
+
+                    try {
+                        const botMessage = await generateResponse(e.target.result);
+                        displayFormattedResult(botMessage);
+                    } catch (error) {
+                        console.error('Error:', error);
+                        resultDiv.textContent = 'Sorry, I encountered an error. Please try again.';
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        function displayFormattedResult(text) {
+            const cleanedText = text.replace(/\*/g, '');
+            const lines = cleanedText.split('\n');
+            let html = '';
+            lines.forEach(line => {
+                if (line.trim()) {
+                    const parts = line.split(':');
+                    if (parts.length === 2) {
+                        html += `<div class="result-item"><span class="result-label">${parts[0].trim()}:</span> ${parts[1].trim()}</div>`;
+                    } else {
+                        html += `<div class="result-item">${line}</div>`;
+                    }
+                }
+            });
+            resultDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
